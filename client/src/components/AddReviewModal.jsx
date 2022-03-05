@@ -12,9 +12,11 @@ import {
   ModalOverlay,
   useToast,
 } from '@chakra-ui/react'
+import { useParams } from 'react-router-dom'
 import { useRef, useState } from 'react'
 
-const AddReviewModal = ({ isOpen, onClose }) => {
+const AddReviewModal = ({ isOpen, onClose, getSpecificCourse }) => {
+  const { id } = useParams()
   const toast = useToast()
   const initialRef = useRef()
   const finalRef = useRef()
@@ -22,7 +24,30 @@ const AddReviewModal = ({ isOpen, onClose }) => {
 
   const onSubmit = async () => {
     try {
-    } catch (err) {}
+      const response = await fetch(
+        `http://localhost:5000/api/courses/${id}/new-review`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ reviewMessage }),
+        },
+      )
+      const data = await response.json()
+      onClose()
+      getSpecificCourse()
+      setReviewMessage('')
+      toast({
+        title: data.message,
+        description: 'Added Review Success',
+        status: 'success',
+        position: 'top-right',
+        duration: 3000,
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (

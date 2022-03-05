@@ -9,7 +9,7 @@ import {
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import AddReviewModal from './AddReviewModal'
+import AddReviewModal from '../components/AddReviewModal'
 
 const Course = () => {
   const [specificCourse, setSpecificCourse] = useState({})
@@ -38,7 +38,11 @@ const Course = () => {
 
   return (
     <>
-      <AddReviewModal isOpen={isOpen} onClose={onClose} />
+      <AddReviewModal
+        isOpen={isOpen}
+        onClose={onClose}
+        getSpecificCourse={getSpecificCourse}
+      />
       <MotionFlex
         initial={{ y: -10 }}
         animate={{ y: 0 }}

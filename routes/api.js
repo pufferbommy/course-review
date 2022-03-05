@@ -63,4 +63,29 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+// Add new review
+router.post('/:id/new-review', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { reviewMessage } = req.body
+    const course = await Course.findOne({ _id: id })
+
+    if (!course) {
+      throw new Error("This course isn't exist.")
+    }
+
+    const newReviews = [...course.reviews, reviewMessage]
+
+    await Course.findOneAndUpdate(
+      { _id: id },
+      { reviews: newReviews },
+      { new: true },
+    )
+
+    res.status(200).json({ message: 'Added review Success' })
+  } catch ({ message }) {
+    res.status(500).json({ message })
+  }
+})
+
 module.exports = router

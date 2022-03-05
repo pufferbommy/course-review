@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Course from './components/Course'
+import Course from './pages/Course'
 import Home from './pages/Home'
 
 const App = () => {
