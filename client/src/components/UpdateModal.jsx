@@ -43,12 +43,14 @@ const UpdateModal = ({ isOpen, onClose, prevCourse, getAllCourses }) => {
         title: 'Update success',
         description: 'Update the course success',
         status: 'success',
-        position: 'top-left',
+        position: 'top-right',
         duration: 3000,
       })
       onClose()
       getAllCourses()
-    } catch (err) {}
+    } catch ({ message }) {
+      console.log(message)
+    }
   }
 
   return (

@@ -42,7 +42,7 @@ const AddModal = ({ isOpen, onClose, getAllCourses }) => {
           description: "We've created course for you",
           status: 'success',
           duration: 5000,
-          position: 'top-left',
+          position: 'top-right',
         })
         setForm({
           code: '',
@@ -72,7 +72,13 @@ const AddModal = ({ isOpen, onClose, getAllCourses }) => {
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        onClose()
+        setForm({
+          code: '',
+          name: '',
+        })
+      }}
     >
       <ModalOverlay />
       <ModalContent>
@@ -104,7 +110,17 @@ const AddModal = ({ isOpen, onClose, getAllCourses }) => {
           <Button onClick={onSubmit} colorScheme="blue" mr={3}>
             Submit
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            onClick={() => {
+              onClose()
+              setForm({
+                code: '',
+                name: '',
+              })
+            }}
+          >
+            Cancel
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

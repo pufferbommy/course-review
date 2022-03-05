@@ -4,13 +4,21 @@ import {
   useDisclosure,
   Button,
   Flex,
+  Box,
 } from '@chakra-ui/react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import UpdateModal from './UpdateModal'
 import AddModal from './AddModal'
+import CancellationAlertDialog from './CancellationAlertDialog'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+
+const MotionBox = motion(Box)
 
 const CourseItem = ({ course, getAllCourses }) => {
   const toast = useToast()
+  const [isCancellationOpen, setIsCancellationOpen] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleDeleteCourse = async () => {
@@ -32,7 +40,7 @@ const CourseItem = ({ course, getAllCourses }) => {
         title: 'Deleted success',
         description: `Course ${course.name} has deleted`,
         status: 'success',
-        position: 'top-left',
+        position: 'top-right',
         duration: 3000,
       })
       getAllCourses()
@@ -41,13 +49,22 @@ const CourseItem = ({ course, getAllCourses }) => {
         title: err.message,
         description: `Cannot delete this course id`,
         status: 'error',
-        position: 'top-left',
+        position: 'top-right',
         duration: 3000,
       })
     }
   }
   return (
-    <>
+    <MotionBox
+      key={course._id}
+      initial={{ x: -10, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+    >
+      <CancellationAlertDialog
+        isCancellationOpen={isCancellationOpen}
+        setIsCancellationOpen={setIsCancellationOpen}
+        handleDeleteCourse={handleDeleteCourse}
+      />
       <UpdateModal
         getAllCourses={getAllCourses}
         prevCourse={course}
@@ -55,6 +72,7 @@ const CourseItem = ({ course, getAllCourses }) => {
         onClose={onClose}
       />
       <AddModal />
+
       <Flex
         position="relative"
         flexDirection="column"
@@ -101,24 +119,33 @@ const CourseItem = ({ course, getAllCourses }) => {
             {course.name}
           </Heading>
         </Flex>
+
+        <Link to={`/${course._id}`}>
+          <Button w="full" size="sm">
+            Review
+          </Button>
+        </Link>
         <Flex
           transform={'auto'}
-          translateY="-50%"
           right={4}
-          top="50%"
+          top={5}
           position="absolute"
           flexDirection="column"
           gap={2}
         >
-          <Button onClick={onOpen} size="xs">
+          <Button colorScheme="yellow" onClick={onOpen} size="xs">
             Edit <EditIcon ml={2} />
           </Button>
-          <Button onClick={handleDeleteCourse} size="xs">
+          <Button
+            colorScheme="red"
+            onClick={() => setIsCancellationOpen(true)}
+            size="xs"
+          >
             Delete <DeleteIcon ml={2} />
           </Button>
         </Flex>
       </Flex>
-    </>
+    </MotionBox>
   )
 }
 

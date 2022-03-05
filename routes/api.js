@@ -8,6 +8,20 @@ router.get('/', async (req, res) => {
   res.json(courses)
 })
 
+// Get specific course
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const course = await Course.findOne({ _id: id })
+    if (!course) {
+      throw new Error("Don't have this course.")
+    }
+    res.status(200).json(course)
+  } catch ({ message }) {
+    res.status(500).json({ message })
+  }
+})
+
 // Add a new course
 router.post('/new', async (req, res) => {
   try {
